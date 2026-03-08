@@ -85,7 +85,14 @@ std::unique_ptr<Map> ClipboardManager::map() const
         return nullptr;
 
     TmxMapFormat format;
-    return format.fromByteArray(data);
+    auto map = format.fromByteArray(data);
+
+    if (!map) {
+        Tiled::WARNING << "Failed to parse TMX data from clipboard:"
+                       << format.errorString();
+    }
+
+    return map;
 }
 
 /**
